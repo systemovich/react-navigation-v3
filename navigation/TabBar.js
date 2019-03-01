@@ -7,55 +7,43 @@ import FeedScreen from '../screens/FeedScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
-const FeedStack = createStackNavigator(
-  {
-    Feed: {
-      screen: FeedScreen,
-      navigationOptions: ({ navigation }) => {
-        return {
-          headerTitle: 'Feed',
-          headerLeft: (
-            <Icon style={{ paddingLeft: 10 }} onPress={() => navigation.openDrawer()} name="md-menu" size={30} />
-          )
-        };
-      }
-    },
-    Detail: {
-      screen: DetailScreen,
-    },
+const tabOptions = ({ navigation }) => {
+  return {
+    headerTitle: navigation.state.routeName,
+    headerLeft: (
+      <Icon 
+        name="md-menu" 
+        onPress={() => navigation.openDrawer()} 
+        size={30} 
+        style={{ paddingLeft: 10 }} 
+      />
+    )
+  };
+}
+
+const FeedStack = createStackNavigator({
+  Feed: {
+    screen: FeedScreen,
+    navigationOptions: tabOptions, 
   },
-  {
-    defaultNavigationOptions: {
-      gesturesEnabled: false
-    }
+  Detail: DetailScreen,
+}, {
+  defaultNavigationOptions: {
+    gesturesEnabled: false
   }
-);
+});
 
 const ProfileStack = createStackNavigator({
   Profile: {
     screen: ProfileScreen,
-    navigationOptions: ({ navigation }) => {
-      return {
-        headerTitle: 'Profile',
-        headerLeft: (
-          <Icon style={{ paddingLeft: 10 }} onPress={() => navigation.openDrawer()} name="md-menu" size={30} />
-        )
-      };
-    }
+    navigationOptions: tabOptions, 
   }
 });
 
 const SettingsStack = createStackNavigator({
   Settings: {
     screen: SettingsScreen,
-    navigationOptions: ({ navigation }) => {
-      return {
-        headerTitle: 'Settings',
-        headerLeft: (
-          <Icon style={{ paddingLeft: 10 }} onPress={() => navigation.openDrawer()} name="md-menu" size={30} />
-        )
-      };
-    }
+    navigationOptions: tabOptions 
   }
 });
 
@@ -65,10 +53,9 @@ export default createBottomTabNavigator({
     SettingsStack
 }, {
   navigationOptions: ({ navigation }) => {
-    const { routeName } = navigation.state.routes[navigation.state.index];
     return {
       header: null,
-      headerTitle: routeName
+      headerTitle: navigation.state.routeName,
     };
   }
 });
